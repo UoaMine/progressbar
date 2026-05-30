@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Admin</title>
+</head>
+<body>
+
+<h1>Admin Panel</h1>
+
+<button onclick="change(-10)">-10</button>
+<button onclick="change(-1)">-1</button>
+
+<h2 id="value">0%</h2>
+
+<button onclick="change(1)">+1</button>
+<button onclick="change(10)">+10</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBRP6u9Ecb_drXafQrzuoztduHkZE4bE1E",
+  authDomain: "kseftilismeni-porni.firebaseapp.com",
+  databaseURL: "https://kseftilismeni-porni-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "kseftilismeni-porni",
+  storageBucket: "kseftilismeni-porni.firebasestorage.app",
+  messagingSenderId: "173871802345",
+  appId: "1:173871802345:web:b5ca7a18a6e2c84a378d78"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const progressRef = ref(db,"progress");
+
+window.change = async function(step){
+
+    const snap = await get(progressRef);
+    let value = snap.val() || 0;
+
+    value += step;
+
+    if(value < 0) value = 0;
+    if(value > 100) value = 100;
+
+    await set(progressRef,value);
+
+    document.getElementById("value").innerText = value + "%";
+};
+
+</script>
+
+</body>
+</html>
