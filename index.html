@@ -29,7 +29,7 @@ body{
     width:0%;
     height:100%;
     background:#bdbdbd;
-    transition:0.5s;
+    transition:.5s;
 }
 
 #percent{
@@ -43,12 +43,35 @@ body{
     font-size:24px;
     font-weight:bold;
 }
+
+#hitButton{
+    display:none;
+    margin-top:20px;
+    padding:12px 24px;
+    font-size:22px;
+}
+
+#popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+}
+
+#popupContent{
+    background:white;
+    max-width:500px;
+    margin:120px auto;
+    padding:20px;
+    border-radius:10px;
+}
 </style>
 </head>
 
 <body>
 
 <div id="container">
+
     <h1>Progress</h1>
 
     <div id="progress">
@@ -56,7 +79,25 @@ body{
     </div>
 
     <div id="percent">0%</div>
+
     <div id="message"></div>
+
+    <button id="hitButton">🍑 HIT</button>
+
+</div>
+
+<div id="popup">
+
+    <div id="popupContent">
+
+        <div id="popupMessage"
+             style="font-size:24px;margin-bottom:20px;">
+        </div>
+
+        <button id="closePopup">OK</button>
+
+    </div>
+
 </div>
 
 <script type="module">
@@ -77,7 +118,53 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const progressRef = ref(db,"progress");
+const progressRef = ref(db, "progress");
+
+const hitButton = document.getElementById("hitButton");
+const popup = document.getElementById("popup");
+const popupMessage = document.getElementById("popupMessage");
+const closePopup = document.getElementById("closePopup");
+
+const messages = {
+  5: "πολυ κυρία μου είσαι..",
+  10: "έλα, θέλει λίγο ακόμα",
+  15: "για να είσαι εδω.. κατι καταλαβαίνεις",
+  20: "χτυπα τη μουναρα σου για την κατάντια σου",
+  25: "θα πρέπει να το πάρεις στα σοβαρά",
+  30: "ξέρεις τι με καυλώνει. κότα",
+  35: "δεν θελω στεναχώριες. ξέρεις τι θες. πουτσα",
+  40: "η ξεφτιλα σοτ θα σε ανεβάσει κι άλλο. ξέρεις που...",
+  45: "",
+  50: "",
+  55: "",
+  60: "",
+  65: "",
+  70: "",
+  75: "",
+  80: "",
+  85: "",
+  90: "",
+  95: "",
+  100: ""
+};
+
+let lastMilestone = -1;
+
+hitButton.addEventListener("click", () => {
+
+    const currentValue = Number(hitButton.dataset.value);
+
+    popupMessage.innerText =
+        messages[currentValue] || "";
+
+    popup.style.display = "block";
+
+    hitButton.style.display = "none";
+});
+
+closePopup.addEventListener("click", () => {
+    popup.style.display = "none";
+});
 
 onValue(progressRef, (snap) => {
 
@@ -93,31 +180,43 @@ onValue(progressRef, (snap) => {
 
     if(value < 25){
         bar.style.background = "#bdbdbd";
-        text = "Θα μείνεις αγάμητη καριόλα!";
+        text = "θσ μείνεις αγαμητη";
     }
     else if(value < 50){
         bar.style.background = "green";
-        text = "νιώθω την ξεφτιλα σου!";
+        text = "προσπάθησε κι αλλο καριολάκι";
     }
     else if(value < 60){
-        bar.style.background = "orange";
-        text = "καλό πουτανακι. θες ακόμα!";
+        bar.style.background = "gold";
+        text = "ξεφτιλισμα θες τελικά!";
     }
     else if(value < 80){
         bar.style.background = "orange";
-        text = "μπράβο ξεφτιλισμένη. μπορείς!!";
+        text = "εχεις φτάσει εδώ γιατί εισαι μεγάλη πουτάνα, εύγε!";
     }
     else if(value < 90){
-        bar.style.background = "red";
-        text = "Με καυλωσες αρκετά, σωστή πόρνη";
+        bar.style.background = "orangered";
+        text = ,"ο πουτσος μου είναι κάγκελο, μπράβο!";
     }
     else if(value < 100){
-        bar.style.background = "darkred";
-        text = "κάγκελο η πούτσα, ψωλοζητιάνα!";
+        bar.style.background = "red";
+        text = "σιχαμηνη καριόλα, ψωλοζητιανα. κοντεύεις";
     }
     else{
         bar.style.background = "darkred";
-        text = "ωρα για άγρια πούτσα";
+        text = "ωρα για άγριο γαμήσι προαγωγής";
+    }
+
+    if (
+        value > 0 &&
+        value % 5 === 0 &&
+        value !== lastMilestone
+    ) {
+        lastMilestone = value;
+
+        hitButton.dataset.value = value;
+
+        hitButton.style.display = "inline-block";
     }
 
     percent.innerText = value + "%";
