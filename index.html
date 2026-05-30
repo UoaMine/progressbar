@@ -148,7 +148,7 @@ const messages = {
   100: ""
 };
 
-let lastMilestone = -1;
+let previousValue = 0;
 
 hitButton.addEventListener("click", () => {
 
@@ -207,17 +207,22 @@ onValue(progressRef, (snap) => {
         text = "ωρα για άγριο γαμήσι προαγωγής";
     }
 
-    if (
-        value > 0 &&
-        value % 5 === 0 &&
-        value !== lastMilestone
-    ) {
-        lastMilestone = value;
+    const previousMilestone =
+    Math.floor(previousValue / 5);
 
-        hitButton.dataset.value = value;
+const currentMilestone =
+    Math.floor(value / 5);
 
-        hitButton.style.display = "inline-block";
-    }
+if (currentMilestone > previousMilestone) {
+
+    const milestone = currentMilestone * 5;
+
+    hitButton.dataset.value = milestone;
+
+    hitButton.style.display = "inline-block";
+}
+
+previousValue = value;
 
     percent.innerText = value + "%";
     message.innerText = text;
