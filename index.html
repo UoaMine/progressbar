@@ -1,91 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Progress Bar</title>
-
-<style>
-body{
-  font-family: Arial, sans-serif;
-  text-align:center;
-  padding:30px;
-}
-
-#container{
-  width:100%;
-  max-width:500px;
-  height:40px;
-  border:1px solid #ccc;
-  margin:20px auto;
-}
-
-#bar{
-  height:100%;
-  width:0%;
-  background:green;
-}
-
-button{
-  font-size:30px;
-  padding:10px 20px;
-  margin:10px;
-}
-</style>
-</head>
-<body>
-
-<h2>Progress</h2>
-
-<div id="container">
-  <div id="bar"></div>
-</div>
-
-<h3 id="percent">0%</h3>
-
-<button onclick="change(-5)">-</button>
-<button onclick="change(5)">+</button>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBRP6u9Ecb_drXafQrzuoztduHkZE4bE1E",
-  authDomain: "kseftilismeni-porni.firebaseapp.com",
-  databaseURL: "https://kseftilismeni-porni-default-rtdb.europe-west1.firebasedatabase.app/",
-  projectId: "kseftilismeni-porni",
-  storageBucket: "kseftilismeni-porni.firebasestorage.app",
-  messagingSenderId: "173871802345",
-  appId: "1:173871802345:web:b5ca7a18a6e2c84a378d78"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-const progressRef = ref(db, "progress");
-
-window.change = function(step){
-  onValue(progressRef, (snap) => {
-    let value = snap.val() || 0;
-    value += step;
-
-    if(value < 0) value = 0;
-    if(value > 100) value = 100;
-
-    set(progressRef, value);
-  }, { onlyOnce: true });
-}
-
 onValue(progressRef, (snap) => {
   let value = snap.val() || 0;
 
-  document.getElementById("bar").style.width = value + "%";
-  document.getElementById("percent").innerText = value + "%";
+  const bar = document.getElementById("bar");
+  const percent = document.getElementById("percent");
+
+  bar.style.width = value + "%";
+
+  let message = "";
+
+  if (value < 25) {
+    bar.style.background = "#bdbdbd";
+    message = "θα μείνεις αγάμητη καριόλα!";
+  }
+  else if (value < 50) {
+    bar.style.background = "green";
+    message = "καλη προσπάθεια καριόλα!";
+  }
+  else if (value < 60) {
+    bar.style.background = "gold";
+    message = "καλό πουτανακι!";
+  }
+  else if (value < 80) {
+    bar.style.background = "orange";
+    message = "με καυλώνεις τωρα πόρνη!!";
+  }
+  else if (value < 90) {
+    bar.style.background = "orangered";
+    message = "ο πουτσος μου καύλωσε!";
+  }
+  else if (value < 100) {
+    bar.style.background = "red";
+    message = "θα φας καλά μωρή ξεφτιλισμένη!";
+  }
+  else {
+    bar.style.background = "darkred";
+    message = "τωρα έχει άγρια πούτσα! 🫟";
+  }
+
+  percent.innerHTML = value + "%<br><br>" + message;
 });
-
-</script>
-
-</body>
-</html>
