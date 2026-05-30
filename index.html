@@ -1,41 +1,131 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress Bar</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    padding:30px;
+}
+
+#container{
+    max-width:600px;
+    margin:auto;
+}
+
+#progress{
+    width:100%;
+    height:50px;
+    background:#ddd;
+    border-radius:25px;
+    overflow:hidden;
+}
+
+#bar{
+    width:0%;
+    height:100%;
+    background:#bdbdbd;
+    transition:0.5s;
+}
+
+#percent{
+    font-size:32px;
+    margin-top:20px;
+    font-weight:bold;
+}
+
+#message{
+    margin-top:20px;
+    font-size:24px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div id="container">
+    <h1>Progress</h1>
+
+    <div id="progress">
+        <div id="bar"></div>
+    </div>
+
+    <div id="percent">0%</div>
+    <div id="message"></div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBRP6u9Ecb_drXafQrzuoztduHkZE4bE1E",
+  authDomain: "kseftilismeni-porni.firebaseapp.com",
+  databaseURL: "https://kseftilismeni-porni-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "kseftilismeni-porni",
+  storageBucket: "kseftilismeni-porni.firebasestorage.app",
+  messagingSenderId: "173871802345",
+  appId: "1:173871802345:web:b5ca7a18a6e2c84a378d78"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const progressRef = ref(db,"progress");
+
 onValue(progressRef, (snap) => {
-  let value = snap.val() || 0;
 
-  const bar = document.getElementById("bar");
-  const percent = document.getElementById("percent");
+    let value = snap.val() || 0;
 
-  bar.style.width = value + "%";
+    const bar = document.getElementById("bar");
+    const percent = document.getElementById("percent");
+    const message = document.getElementById("message");
 
-  let message = "";
+    bar.style.width = value + "%";
 
-  if (value < 25) {
-    bar.style.background = "#bdbdbd";
-    message = "θα μείνεις αγάμητη καριόλα!";
-  }
-  else if (value < 50) {
-    bar.style.background = "green";
-    message = "καλη προσπάθεια καριόλα!";
-  }
-  else if (value < 60) {
-    bar.style.background = "gold";
-    message = "καλό πουτανακι!";
-  }
-  else if (value < 80) {
-    bar.style.background = "orange";
-    message = "με καυλώνεις τωρα πόρνη!!";
-  }
-  else if (value < 90) {
-    bar.style.background = "orangered";
-    message = "ο πουτσος μου καύλωσε!";
-  }
-  else if (value < 100) {
-    bar.style.background = "red";
-    message = "θα φας καλά μωρή ξεφτιλισμένη!";
-  }
-  else {
-    bar.style.background = "darkred";
-    message = "τωρα έχει άγρια πούτσα! 🫟";
-  }
+    let text = "";
 
-  percent.innerHTML = value + "%<br><br>" + message;
+    if(value < 25){
+        bar.style.background = "#bdbdbd";
+        text = "Θα μείνεις αγάμητη καριόλα!";
+    }
+    else if(value < 50){
+        bar.style.background = "green";
+        text = "Κοντεύεις να τον φας!";
+    }
+    else if(value < 60){
+        bar.style.background = "orange";
+        text = "Βάλε δάχτυλο 3 φορές!";
+    }
+    else if(value < 80){
+        bar.style.background = "orange";
+        text = "Βάλε δάχτυλο 3 φορές έως το 80!";
+    }
+    else if(value < 90){
+        bar.style.background = "red";
+        text = "Μου τον έχεις κάγκελο!";
+    }
+    else if(value < 100){
+        bar.style.background = "darkred";
+        text = "Μου τον έχεις κάγκελο!";
+    }
+    else{
+        bar.style.background = "darkred";
+        text = "Είσαι υπέροχη, θα τον φας;";
+    }
+
+    percent.innerText = value + "%";
+    message.innerText = text;
+
 });
+
+</script>
+
+</body>
+</html>
