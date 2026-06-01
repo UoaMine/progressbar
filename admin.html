@@ -39,8 +39,8 @@
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
+import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  
 const firebaseConfig = {
   apiKey: "AIzaSyBRP6u9Ecb_drXafQrzuoztduHkZE4bE1E",
   authDomain: "kseftilismeni-porni.firebaseapp.com",
@@ -53,7 +53,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const progressRef = ref(db,"progress");
+const questionRef = ref(db,"question");
+const answerRef = ref(db,"answer");
 
 window.change = async function(step){
 
@@ -70,6 +71,22 @@ window.change = async function(step){
     document.getElementById("value").innerText = value + "%";
 };
 
+window.sendQuestion = async function(){
+
+    const question =
+        document.getElementById("question").value;
+
+    await set(questionRef, question);
+};
+
+onValue(answerRef, (snap) => {
+
+    const answer = snap.val();
+
+    document.getElementById("latestAnswer")
+        .innerText = answer || "Καμία απάντηση ακόμη";
+});
+  
 </script>
 
 </body>
