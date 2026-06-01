@@ -16,6 +16,26 @@
 <button onclick="change(1)">+1</button>
 <button onclick="change(10)">+10</button>
 
+  <h3>Ερώτηση / Οδηγία</h3>
+
+<textarea id="question"
+          rows="4"
+          cols="40"></textarea>
+
+<br><br>
+
+<button onclick="sendQuestion()">
+Αποστολή Ερώτησης
+</button>
+
+<hr>
+
+<h3>Τελευταία Απάντηση</h3>
+
+<div id="latestAnswer">
+Καμία απάντηση ακόμη
+</div>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
