@@ -103,7 +103,7 @@ body{
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, onValue,set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBRP6u9Ecb_drXafQrzuoztduHkZE4bE1E",
@@ -118,7 +118,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const progressRef = ref(db, "progress");
+const questionRef = ref(db, "question");
+const answerRef = ref(db, "answer");
 
 const hitButton = document.getElementById("hitButton");
 const popup = document.getElementById("popup");
